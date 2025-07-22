@@ -21,13 +21,13 @@ library(tidyverse)
 library(vegan)
 ###############DATA#######################
 ### Load Shapefiles
-city_polygon <- st_read("Manuscrito/v2/AreadeEstudio/quilla_mpio.shp") 
-department_polygon <- st_read("Manuscrito/v2/AreadeEstudio/4326_atpio.shp") 
-country_polygon <- st_read("Manuscrito/v2/AreadeEstudio/colombia_sinSA.shp") 
+city_polygon <- st_read("AreadeEstudio/quilla_mpio.shp") 
+department_polygon <- st_read("AreadeEstudio/4326_atpio.shp") 
+country_polygon <- st_read("AreadeEstudio/colombia_sinSA.shp") 
 perimetro <- st_read("Manuscrito/mapas/Perimetro del Barrio abajo.shp")
 barrio_polygon <- st_transform(perimetro, 4326)
 ### Load Neighborhood Sectors
-sectors <- st_read("Manuscrito/v2/AreadeEstudio/sectores.shp") %>% 
+sectors <- st_read("AreadeEstudio/sectores.shp") %>% 
   st_transform(crs = 9377)
 # Load spatial data
 blocks <- st_read("Manuscrito/mapas/Manzanas Barrio Abajo.shp")
@@ -35,7 +35,7 @@ neighborhood_boundary <- st_read("Manuscrito/mapas/Perimetro del Barrio abajo.sh
 sectors <- st_read("Manuscrito/mapas/sectores.shp")
 
 # Load tree database
-tree_data <- read.xlsx("Manuscrito/v2/Cluster_dominantes/Database_final.xlsx", sheet = 3)
+tree_data <- read.xlsx("Database_final.xlsx", sheet = 3)
 
 #####FIG1###########################################
 
@@ -171,7 +171,7 @@ map_country <- ggplot() +
   )
 
 ### Load Community Matrix for iNEXT
-barrio_matrix <- read.xlsx("Manuscrito/v2/Cluster_dominantes/Database_final.xlsx", sheet = 11)[-c(82:88),]
+barrio_matrix <- read.xlsx("Database_final.xlsx", sheet = 11)[-c(82:88),]
 abundances <- as.matrix(barrio_matrix[,-1])
 rownames(abundances) <- barrio_matrix[,1]
 colnames(abundances) <- "Barrio Abajo"
@@ -195,7 +195,7 @@ diversity_plot <- ggplot(div_summary, aes(x = Diversity, y = Observed)) +
   theme(panel.grid = element_blank(), legend.position = "none")
 
 ### Load Tree Data and Create Density Plot
-tree_data <- read.xlsx("Manuscrito/v2/Cluster_dominantes/Database_final.xlsx", sheet = 3)
+tree_data <- read.xlsx("Database_final.xlsx", sheet = 3)
 tree_points <- st_as_sf(tree_data, coords = c("X", "Y"), crs = 4326) %>%
   st_transform(crs = st_crs(sectors))
 
@@ -532,7 +532,7 @@ map_plot_s <- ggplot() +
 
 
 # ---- C. Sector-level iNEXT Diversity
-matriz_sectores <- read.xlsx("Manuscrito/v2/Cluster_dominantes/Database_final.xlsx", sheet = "Diversidad_Sectores")
+matriz_sectores <- read.xlsx("Database_final.xlsx", sheet = "Diversidad_Sectores")
 matriz_sectores <- matriz_sectores[-c(82:88), -19]
 tabla_sectores <- matriz_sectores[,-1]
 m_sectores <- as.matrix(tabla_sectores)
@@ -541,7 +541,7 @@ row.names(m_sectores) <- matriz_sectores[,1]
 inext_sectores <- iNEXT(m_sectores, q=c(0,1,2), datatype="abundance", endpoint = 196, knots=100, se=TRUE, conf=0.95, nboot=99)
 info_sectores <- as.data.frame(inext_sectores$DataInfo)
 
-manzanas_ba <- read.csv("Manuscrito/v2/Escalas/manzanas_ba2.csv")
+manzanas_ba <- read.csv("Escalas/manzanas_ba2.csv")
 crs_blocks <- st_crs(blocks)
 indices_man <- st_as_sf(x = manzanas_ba, wkt = 1, crs = crs_blocks)
 indices_man$Abundancia.s <- info_sectores$n[match(manzanas_ba$Sector, info_sectores$Assemblage)]
@@ -586,7 +586,7 @@ N.sector <- ggplot() +
 
 
 # ---- E. iNEXT Richness by Block
-matriz_manzanas <- read.xlsx("Manuscrito/v2/Cluster_dominantes/Database_final.xlsx", sheet = "D_Manzanas")
+matriz_manzanas <- read.xlsx("Database_final.xlsx", sheet = "D_Manzanas")
 tabla_manzanas <- matriz_manzanas[,-1]
 m_manzanas <- as.matrix(tabla_manzanas)
 row.names(m_manzanas) <- matriz_manzanas[,1]
@@ -1010,7 +1010,7 @@ dev.off()
 ######################FIG4###########
 # 1. Load both sheets
 individuals <- tree_data
-species_info <- read.xlsx("Manuscrito/v2/Cluster_dominantes/Database_final.xlsx", sheet = 2)  # characteristics
+species_info <- read.xlsx("Database_final.xlsx", sheet = 2)  # characteristics
 
 
 # 2. Merge species origin info into individuals dataset
