@@ -24,15 +24,15 @@ library(vegan)
 city_polygon <- st_read("AreadeEstudio/quilla_mpio.shp") 
 department_polygon <- st_read("AreadeEstudio/4326_atpio.shp") 
 country_polygon <- st_read("AreadeEstudio/colombia_sinSA.shp") 
-perimetro <- st_read("Manuscrito/mapas/Perimetro del Barrio abajo.shp")
+perimetro <- st_read("mapas/Perimetro del Barrio abajo.shp")
 barrio_polygon <- st_transform(perimetro, 4326)
 ### Load Neighborhood Sectors
 sectors <- st_read("AreadeEstudio/sectores.shp") %>% 
   st_transform(crs = 9377)
 # Load spatial data
-blocks <- st_read("Manuscrito/mapas/Manzanas Barrio Abajo.shp")
-neighborhood_boundary <- st_read("Manuscrito/mapas/Perimetro del Barrio abajo.shp")
-sectors <- st_read("Manuscrito/mapas/sectores.shp")
+blocks <- st_read("mapas/Manzanas Barrio Abajo.shp")
+neighborhood_boundary <- st_read("mapas/Perimetro del Barrio abajo.shp")
+sectors <- st_read("mapas/sectores.shp")
 
 # Load tree database
 tree_data <- read.xlsx("Database_final.xlsx", sheet = 3)
